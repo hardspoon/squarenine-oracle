@@ -1,6 +1,6 @@
 import React from 'react';
 import { GridCell } from './ui/GridCell';
-import { GridFrequencies } from '../types/numerology';
+import type { GridFrequencies } from '../types/numerology';
 import { GRID_ORDER } from '../constants';
 import { FadeIn } from './ui/FadeIn';
 

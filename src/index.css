@@ -6,3 +6,12 @@
 body {
   @apply bg-cream-50 font-sans text-slate-800 antialiased;
 }
+
+@keyframes shine {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(200%) skewX(-12deg); }
+}
+
+.animate-shine {
+  animation: shine 2s infinite;
+}

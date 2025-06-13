@@ -1,4 +1,4 @@
-import { GridFrequencies } from '../types/numerology';
+import type { GridFrequencies } from '../types/numerology';
 
 export const calculateGridFrequencies = (dateString: string): GridFrequencies => {
   const frequencies: GridFrequencies = {

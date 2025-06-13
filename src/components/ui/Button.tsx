@@ -38,7 +38,9 @@ export const Button: React.FC<ButtonProps> = ({
       whileHover={!disabled ? { scale: 1.02, boxShadow: '0 8px 25px rgba(139, 66, 255, 0.25)' } : {}}
       whileTap={!disabled ? { scale: 0.98 } : {}}
       disabled={disabled}
-      {...props}
+      type={props.type}
+      onClick={props.onClick}
+      onSubmit={props.onSubmit}
     >
       {withShine && !disabled && <Shine />}
       {children}

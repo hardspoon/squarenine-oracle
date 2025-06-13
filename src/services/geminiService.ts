@@ -1,4 +1,4 @@
-import { NumerologyReading } from '../types/numerology';
+import type { NumerologyReading } from '../types/numerology';
 
 export const generateReading = async (reading: NumerologyReading): Promise<string> => {
   // Simulate API delay

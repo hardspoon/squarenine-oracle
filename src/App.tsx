@@ -9,7 +9,7 @@ import { GridDisplay } from './components/GridDisplay';
 import { ReadingDisplay } from './components/ReadingDisplay';
 import { calculateGridFrequencies, calculateLifePath } from './utils/numerology';
 import { generateReading } from './services/geminiService';
-import { AppState, GridFrequencies, NumerologyReading } from './types/numerology';
+import type { AppState, GridFrequencies, NumerologyReading } from './types/numerology';
 
 function App() {
   // State management
