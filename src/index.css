@@ -1,17 +1,175 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-cream-50 font-sans text-slate-800 antialiased;
+@layer base {
+  body {
+    @apply bg-slate-900 font-sans text-white antialiased overflow-x-hidden;
+    background: radial-gradient(ellipse at center, #1e1b4b 0%, #0f0f23 50%, #000000 100%);
+    min-height: 100vh;
+  }
 }
 
-@keyframes shine {
-  0% { transform: translateX(-100%) skewX(-12deg); }
-  100% { transform: translateX(200%) skewX(-12deg); }
+@layer components {
+  /* Mystical Card Styling */
+  .mystical-card {
+    @apply bg-slate-800 bg-opacity-80 backdrop-blur-sm border border-purple-500 border-opacity-30 rounded-3xl shadow-2xl;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Grid Styling */
+  .numerology-grid {
+    @apply bg-slate-800 bg-opacity-90 border-2 border-amber-400 border-opacity-40 rounded-2xl p-8 relative;
+    box-shadow: 
+      0 0 40px rgba(245, 158, 11, 0.2),
+      inset 0 0 20px rgba(107, 70, 193, 0.1);
+  }
+
+  .grid-cell {
+    @apply bg-slate-700 bg-opacity-80 border-2 border-purple-400 border-opacity-40 rounded-lg transition-all duration-300 relative overflow-hidden;
+  }
+
+  .grid-cell:hover {
+    @apply border-amber-400 border-opacity-80 shadow-lg;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  }
+
+  .grid-cell-active {
+    @apply border-amber-400 border-opacity-80;
+    box-shadow: 
+      0 0 20px rgba(245, 158, 11, 0.4),
+      inset 0 0 10px rgba(245, 158, 11, 0.1);
+    animation: mystical-pulse 2s ease-in-out infinite;
+  }
+
+  .grid-cell-intense {
+    @apply border-amber-400 bg-amber-400 bg-opacity-20;
+    box-shadow: 
+      0 0 30px rgba(245, 158, 11, 0.6),
+      inset 0 0 15px rgba(245, 158, 11, 0.2);
+    animation: intense-glow 1.5s ease-in-out infinite alternate;
+  }
+
+  /* Button Enhancements */
+  .mystical-button {
+    @apply bg-gradient-to-r from-purple-600 to-purple-700 border-2 border-amber-400 border-opacity-60 text-white font-semibold shadow-lg hover:border-amber-400 hover:shadow-xl transition-all duration-300 relative overflow-hidden;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 
+      0 4px 15px rgba(107, 70, 193, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .mystical-button:hover {
+    @apply -translate-y-0.5;
+    box-shadow: 
+      0 8px 25px rgba(107, 70, 193, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  /* Input Field Styling */
+  .mystical-input {
+    @apply bg-slate-800 bg-opacity-90 border-2 border-purple-400 border-opacity-40 text-white backdrop-blur-sm transition-all duration-300;
+  }
+
+  .mystical-input:focus {
+    @apply border-amber-400 border-opacity-80 outline-none;
+    box-shadow: 
+      0 0 20px rgba(245, 158, 11, 0.3),
+      inset 0 0 10px rgba(245, 158, 11, 0.1);
+  }
+
+  .mystical-input::placeholder {
+    @apply text-purple-300 text-opacity-50;
+  }
+
+  /* Typography */
+  .mystical-title {
+    @apply font-serif bg-gradient-to-r from-amber-400 via-purple-400 to-purple-600 bg-clip-text text-transparent;
+    text-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  .mystical-subtitle {
+    @apply text-purple-200 text-opacity-80;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Life Path Number Styling */
+  .life-path-number {
+    @apply text-5xl font-bold bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent;
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  }
+
+  /* Spinner Enhancement */
+  .mystical-spinner {
+    @apply border-4 border-purple-400 border-opacity-30 border-t-amber-500 rounded-full;
+    animation: spin 2s linear infinite, pulse-glow 3s ease-in-out infinite;
+  }
+
+  /* Reading Display */
+  .mystical-reading {
+    @apply bg-slate-800 bg-opacity-95 border-2 border-amber-400 border-opacity-40 backdrop-blur-sm shadow-2xl;
+    box-shadow: 
+      0 0 40px rgba(245, 158, 11, 0.2),
+      inset 0 0 20px rgba(107, 70, 193, 0.1);
+  }
 }
 
-.animate-shine {
-  animation: shine 2s infinite;
+@layer utilities {
+  @keyframes mystical-pulse {
+    0%, 100% { 
+      box-shadow: 
+        0 0 20px rgba(245, 158, 11, 0.4),
+        inset 0 0 10px rgba(245, 158, 11, 0.1);
+    }
+    50% { 
+      box-shadow: 
+        0 0 30px rgba(245, 158, 11, 0.6),
+        inset 0 0 15px rgba(245, 158, 11, 0.2);
+    }
+  }
+
+  @keyframes intense-glow {
+    0% { 
+      box-shadow: 
+        0 0 30px rgba(245, 158, 11, 0.6),
+        inset 0 0 15px rgba(245, 158, 11, 0.2);
+    }
+    100% { 
+      box-shadow: 
+        0 0 40px rgba(245, 158, 11, 0.8),
+        inset 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    }
+    50% { 
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.8);
+    }
+  }
+
+  @keyframes shine {
+    0% { 
+      transform: translateX(-100%) skewX(-12deg); 
+      opacity: 0;
+    }
+    50% { 
+      opacity: 1;
+    }
+    100% { 
+      transform: translateX(200%) skewX(-12deg); 
+      opacity: 0;
+    }
+  }
+
+  .animate-shine {
+    animation: shine 3s ease-in-out infinite;
+  }
 }

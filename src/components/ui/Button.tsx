@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shine } from './Shine';
+import GlareHover from '../reactbits/GlareHover';
 import { motion } from 'framer-motion';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,33 +17,44 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses = `
-    min-h-[44px] px-6 py-3 sm:py-4 text-base sm:text-lg
-    rounded-xl font-medium transition-all duration-300
-    touch-manipulation select-none relative overflow-hidden
-    ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
+    mystical-button min-h-[48px] px-8 py-4 text-lg font-semibold
+    rounded-xl transition-all duration-300 relative overflow-hidden
+    ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
   `;
 
   const variantClasses = {
-    primary: disabled 
-      ? 'bg-slate-500 text-slate-300'
-      : 'bg-gradient-to-r from-mystic-purple-600 to-mystic-purple-700 text-white hover:from-mystic-purple-700 hover:to-mystic-purple-800',
-    secondary: disabled
-      ? 'bg-slate-300 text-slate-500'
-      : 'bg-cream-100 text-mystic-purple-700 hover:bg-cream-200 border border-cream-300'
+    primary: 'mystical-button',
+    secondary: `
+      bg-gradient-to-r from-slate-700/80 to-slate-600/80 
+      border-2 border-purple-400/40 text-purple-200
+      hover:border-amber-400/60 hover:text-amber-200
+    `
   };
 
   return (
-    <motion.button
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
-      whileHover={!disabled ? { scale: 1.02, boxShadow: '0 8px 25px rgba(139, 66, 255, 0.25)' } : {}}
+    <motion.div
+      whileHover={!disabled ? { scale: 1.02 } : {}}
       whileTap={!disabled ? { scale: 0.98 } : {}}
-      disabled={disabled}
-      type={props.type}
-      onClick={props.onClick}
-      onSubmit={props.onSubmit}
     >
-      {withShine && !disabled && <Shine />}
-      {children}
-    </motion.button>
+      <GlareHover
+        width="auto"
+        height="auto"
+        background="transparent"
+        borderRadius="12px"
+        glareColor="#f59e0b"
+        glareOpacity={0.3}
+        className={`${baseClasses} ${variant === 'primary' ? variantClasses.primary : variantClasses.secondary} ${className}`}
+        style={{ border: 'none' }}
+      >
+        <button
+          className="w-full h-full bg-transparent border-none outline-none cursor-inherit"
+          disabled={disabled}
+          type={props.type}
+          onClick={props.onClick}
+        >
+          <span className="relative z-10">{children}</span>
+        </button>
+      </GlareHover>
+    </motion.div>
   );
 };

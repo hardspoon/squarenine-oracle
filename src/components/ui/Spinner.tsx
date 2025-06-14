@@ -11,29 +11,41 @@ export const Spinner: React.FC<SpinnerProps> = ({
   className = '' 
 }) => {
   const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16'
+    sm: 'w-8 h-8',
+    md: 'w-16 h-16',
+    lg: 'w-24 h-24'
   };
 
   return (
-    <motion.div
-      className={`
-        ${sizeClasses[size]} 
-        rounded-full border-4 border-mystic-purple-200 
-        border-t-mystic-purple-600 
-        ${className}
-      `}
-      animate={{
-        rotate: 360,
-        scale: [1, 1.1, 1],
-        opacity: [0.7, 1, 0.7]
-      }}
-      transition={{
-        rotate: { duration: 1, repeat: Infinity, ease: 'linear' },
-        scale: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
-        opacity: { duration: 2, repeat: Infinity, ease: 'easeInOut' }
-      }}
-    />
+    <div className={`relative ${className}`}>
+      <motion.div
+        className={`
+          mystical-spinner ${sizeClasses[size]} rounded-full
+        `}
+        animate={{
+          rotate: 360,
+        }}
+        transition={{
+          rotate: { duration: 2, repeat: Infinity, ease: 'linear' },
+        }}
+      />
+      
+      {/* Inner geometry */}
+      <motion.div
+        className={`
+          absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+          ${size === 'lg' ? 'w-12 h-12' : size === 'md' ? 'w-8 h-8' : 'w-4 h-4'}
+          border-2 border-amber-400 rotate-45 rounded-sm
+        `}
+        animate={{
+          rotate: -360,
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          rotate: { duration: 3, repeat: Infinity, ease: 'linear' },
+          scale: { duration: 2, repeat: Infinity, ease: 'easeInOut' }
+        }}
+      />
+    </div>
   );
 };

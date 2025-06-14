@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useInputValue, useFirstRender, Show } from './hooks/customHooks';
 import { Layout } from './components/layout/Layout';
+import { CursorEffect } from './components/ui/CursorEffect';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Spinner } from './components/ui/Spinner';
 import { FadeIn } from './components/ui/FadeIn';
-import { GridDisplay } from './components/GridDisplay';
+import { EnhancedGridDisplay } from './components/EnhancedGridDisplay';
 import { ReadingDisplay } from './components/ReadingDisplay';
 import { calculateGridFrequencies, calculateLifePath } from './utils/numerology';
 import { generateReading } from './services/geminiService';
 import type { AppState, GridFrequencies, NumerologyReading } from './types/numerology';
+import { motion } from 'framer-motion';
 
 function App() {
   // State management
@@ -54,6 +56,7 @@ function App() {
     setError('');
     return true;
   };
+
   // Event handlers
   const handleInitialSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,79 +107,110 @@ function App() {
     birthdate.setValue('1990-01-01');
     email.reset();
   };
+
   return (
     <Layout>
+      <CursorEffect />
       <FadeIn delay={isFirstRender ? 0 : 0}>
         <div className="text-center space-y-8">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light text-mystic-purple-700 mb-4">
+          <div className="mb-12">
+            <motion.h1 
+              className="mystical-title text-4xl sm:text-5xl lg:text-6xl font-bold mb-6"
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               SquareNine Oracle
-            </h1>
-            <p className="text-lg sm:text-xl text-slate-600 font-light">
-              Discover your energetic signature through sacred numerology
-            </p>
+            </motion.h1>
+            <motion.p 
+              className="text-lg sm:text-xl lg:text-2xl font-light text-primary-200"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              Discover your personal numerology profile and insights
+            </motion.p>
           </div>
 
           {/* Error Display */}
           <Show when={!!error}>
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
+            <motion.div 
+              className="bg-red-900/50 border border-red-400/50 rounded-xl p-4 text-red-200 backdrop-blur-sm"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
               {error}
-            </div>
+            </motion.div>
           </Show>
 
           {/* Initial Form */}
           <Show when={appState === 'initial'}>
             <FadeIn>
-              <form onSubmit={handleInitialSubmit} className="space-y-6">
-                <Input
-                  label="Your Name"
-                  value={name.value}
-                  onChange={name.onChange}
-                  placeholder="Enter your full name"
-                  required
-                />
-                <Input
-                  label="Birth Date"
-                  type="date"
-                  value={birthdate.value}
-                  onChange={birthdate.onChange}
-                  required
-                />
-                <Button type="submit" withShine>
-                  Reveal My Grid
+              <form onSubmit={handleInitialSubmit} className="space-y-8 max-w-md mx-auto">
+                <div className="space-y-6">
+                  <Input
+                    label="Your Name"
+                    value={name.value}
+                    onChange={name.onChange}
+                    placeholder=""
+                    required
+                  />
+                  <Input
+                    label="Date of Birth"
+                    type="date"
+                    value={birthdate.value}
+                    onChange={birthdate.onChange}
+                    required
+                  />
+                </div>
+                <Button type="submit" withShine className="w-full">
+                  Generate My Profile
                 </Button>
               </form>
             </FadeIn>
           </Show>
+
           {/* Grid Display */}
           <Show when={appState === 'grid_displayed'}>
-            <div className="space-y-8">
-              <GridDisplay frequencies={gridFrequencies} />
+            <div className="space-y-10">
+              <EnhancedGridDisplay frequencies={gridFrequencies} />
               
-              <div className="text-center">
-                <p className="text-lg text-mystic-purple-600 mb-2">
-                  Life Path Number: <span className="font-semibold text-2xl">{lifePath}</span>
-                </p>
-                <p className="text-slate-600 mb-6">
-                  Your sacred numbers have been revealed. Enter your email to receive your personalized reading.
-                </p>
+              <div className="text-center space-y-6">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.2 }}
+                >
+                  <p className="text-amber-300 text-lg mb-2">Life Path Number</p>
+                  <div className="life-path-number">{lifePath}</div>
+                </motion.div>
                 
-                <form onSubmit={handleReadingSubmit} className="space-y-6">
+                <motion.p 
+                  className="text-primary-200 text-lg leading-relaxed max-w-lg mx-auto"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.5 }}
+                >
+                  Your numbers have been revealed through the cosmic frequencies. 
+                  Enter your email to receive your personalized reading.
+                </motion.p>
+                
+                <form onSubmit={handleReadingSubmit} className="space-y-6 max-w-md mx-auto mt-8">
                   <Input
                     label="Email Address"
                     type="email"
                     value={email.value}
                     onChange={email.onChange}
-                    placeholder="your@email.com"
+                    placeholder=""
                     required
                   />
-                  <div className="flex gap-4 justify-center">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button type="submit" withShine>
                       Generate Reading
                     </Button>
                     <Button variant="secondary" onClick={resetApp}>
-                      Start Over
+                      Start New Journey
                     </Button>
                   </div>
                 </form>
@@ -186,18 +220,29 @@ function App() {
 
           {/* Loading State */}
           <Show when={appState === 'loading_reading'}>
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-8 py-12">
               <Spinner size="lg" className="mx-auto" />
-              <div>
-                <h3 className="text-xl text-mystic-purple-700 mb-2">
+              <div className="space-y-4">
+                <motion.h3 
+                  className="text-2xl text-amber-300 font-semibold"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
                   Consulting the Oracle...
-                </h3>
-                <p className="text-slate-600">
-                  Your personalized reading is being channeled through the cosmic frequencies
-                </p>
+                </motion.h3>
+                <motion.p 
+                  className="text-purple-200 text-lg leading-relaxed max-w-lg mx-auto"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  Your personalized reading is being channeled through the cosmic frequencies. 
+                  The ancient wisdom is awakening...
+                </motion.p>
               </div>
             </div>
           </Show>
+
           {/* Reading Display */}
           <Show when={appState === 'reading_complete'}>
             <div className="space-y-8">
@@ -205,7 +250,7 @@ function App() {
               
               <div className="text-center">
                 <Button variant="secondary" onClick={resetApp}>
-                  Create Another Reading
+                  Begin Another Journey
                 </Button>
               </div>
             </div>

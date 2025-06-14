@@ -20,49 +20,61 @@ export const GridCell: React.FC<GridCellProps> = ({
   };
 
   const getCellClasses = () => {
-    const baseClasses = `
-      flex items-center justify-center rounded-xl border-2 text-center font-medium
-      transition-all duration-300 cursor-pointer select-none
+    let classes = `
+      grid-cell flex items-center justify-center rounded-lg text-center font-bold
+      w-16 h-16 sm:w-20 sm:h-20 cursor-pointer select-none relative
       ${className}
     `;
 
     if (frequency === 0) {
-      return `${baseClasses} bg-slate-100 border-slate-200 text-slate-300`;
-    }
-    
-    if (frequency === 1) {
-      return `${baseClasses} bg-mystic-purple-50 border-mystic-purple-200 text-mystic-purple-600 shadow-sm`;
-    }
-    
-    if (frequency === 2) {
-      return `${baseClasses} bg-mystic-purple-100 border-mystic-purple-300 text-mystic-purple-700 shadow-md`;
+      classes += ' opacity-40 text-slate-500';
+    } else if (frequency === 1) {
+      classes += ' grid-cell-active text-amber-300';
+    } else if (frequency === 2) {
+      classes += ' grid-cell-active text-amber-200';
+    } else {
+      classes += ' grid-cell-intense text-amber-100 font-extrabold';
     }
 
-    // frequency >= 3
-    return `${baseClasses} bg-gradient-to-br from-mystic-purple-200 to-mystic-purple-300 border-mystic-purple-400 text-mystic-purple-800 shadow-lg`;
+    return classes;
   };
 
   return (
     <motion.div
       className={getCellClasses()}
-      whileHover={{ 
-        scale: 1.05, 
-        boxShadow: '0 8px 25px rgba(139, 66, 255, 0.25)' 
-      }}
-      animate={frequency >= 3 ? {
-        boxShadow: [
-          '0 0 0 rgba(139, 66, 255, 0.3)',
-          '0 0 20px rgba(139, 66, 255, 0.6)',
-          '0 0 0 rgba(139, 66, 255, 0.3)'
-        ]
+      whileHover={frequency > 0 ? { 
+        scale: 1.1,
+        boxShadow: '0 8px 25px rgba(245, 158, 11, 0.6)',
+        rotateY: 5
       } : {}}
-      transition={{
-        boxShadow: { duration: 2, repeat: Infinity, ease: 'easeInOut' }
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ 
+        duration: 0.5,
+        delay: digit * 0.1 // Stagger animation based on digit
       }}
     >
-      <span className="text-sm sm:text-lg font-semibold">
+      <span className="text-sm sm:text-lg font-bold relative z-10">
         {getDisplayContent()}
       </span>
+      
+      {/* Pulsing animation for high frequency cells */}
+      {frequency >= 2 && (
+        <motion.div
+          className="absolute inset-0 border border-amber-400 rounded-lg opacity-30"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
+      
+      {/* Rotating geometry for highest frequency cells */}
+      {frequency >= 3 && (
+        <motion.div 
+          className="absolute inset-0 border border-purple-400 rounded-full opacity-20"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        />
+      )}
     </motion.div>
   );
 };

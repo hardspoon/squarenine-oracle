@@ -19,8 +19,11 @@ export const Input: React.FC<InputProps> = ({
     <div className={`relative ${className}`}>
       <motion.label
         className={`
-          absolute left-4 transition-all duration-200 pointer-events-none
-          ${focused || props.value ? 'top-2 text-xs text-mystic-purple-600' : 'top-4 text-slate-400'}
+          absolute left-4 transition-all duration-300 pointer-events-none z-10
+          ${focused || props.value ? 
+            'top-2 text-xs text-amber-400 font-medium' : 
+            'top-4 text-base text-purple-300'
+          }
         `}
         animate={{
           y: focused || props.value ? -8 : 0,
@@ -31,11 +34,10 @@ export const Input: React.FC<InputProps> = ({
       </motion.label>
       <input
         className={`
-          w-full h-14 pt-6 pb-2 px-4 text-lg rounded-xl
-          border-2 ${error ? 'border-red-300' : 'border-cream-200'}
-          bg-cream-50 focus:ring-4 focus:ring-gold-300 focus:border-gold-400
-          touch-manipulation transition-all duration-200
-          outline-none
+          mystical-input w-full h-16 pt-6 pb-2 px-4 text-lg rounded-xl
+          ${error ? 'border-red-400' : 'border-purple-400/40'}
+          placeholder-transparent focus:placeholder-purple-300/50
+          transition-all duration-300
         `}
         type={type}
         onFocus={() => setFocused(true)}
@@ -43,7 +45,13 @@ export const Input: React.FC<InputProps> = ({
         {...props}
       />
       {error && (
-        <p className="mt-2 text-sm text-red-600">{error}</p>
+        <motion.p 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-2 text-sm text-red-400"
+        >
+          {error}
+        </motion.p>
       )}
     </div>
   );

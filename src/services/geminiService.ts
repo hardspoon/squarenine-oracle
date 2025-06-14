@@ -27,7 +27,7 @@ lifePath === 8 ? 'material mastery and achievement' :
 lifePath === 9 ? 'humanitarian service and wisdom' :
 lifePath === 11 ? 'spiritual illumination and inspiration' :
 lifePath === 22 ? 'master building and manifestation' :
-lifePath === 33 ? 'master teaching and healing' : 'unique spiritual purpose'}. This sacred path illuminates your deepest calling and the gifts you bring to the world.
+lifePath === 33 ? 'master teaching and healing' : 'unique spiritual purpose'}. This path illuminates your deepest calling and the gifts you bring to the world.
 
 Your energetic grid reveals profound insights about your spiritual blueprint. ${strongestNumbers.length > 0 ? 
 `The numbers ${strongestNumbers.map(n => n.digit).join(', ')} appear most frequently in your grid, indicating powerful energetic influences that shape your reality. These numbers represent your natural strengths and the cosmic forces that support your journey.` : ''}
@@ -37,7 +37,7 @@ ${missingNumbers.length > 0 ?
 
 Your unique energetic signature suggests a soul that ${Math.random() > 0.5 ? 'seeks harmony between the material and spiritual realms' : 'is here to bridge ancient wisdom with modern understanding'}. Trust in the divine timing of your journey, for every experience is perfectly orchestrated for your highest evolution.
 
-Embrace your gifts, honor your challenges, and remember that you are exactly where you need to be on your sacred path.
+Embrace your gifts, honor your challenges, and remember that you are exactly where you need to be on your path.
 
 With cosmic blessings,
 The Oracle`;
