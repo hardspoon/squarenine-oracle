@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useInputValue, useFirstRender, Show } from './hooks/customHooks';
 import { Layout } from './components/layout/Layout';
+import { useSwipeDetection, useLocalStorage } from 'react-haiku';
 import { CursorEffect } from './components/ui/CursorEffect';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Spinner } from './components/ui/Spinner';
 import { FadeIn } from './components/ui/FadeIn';
+import Spotlight from './components/Spotlight';
 import { EnhancedGridDisplay } from './components/EnhancedGridDisplay';
 import { ReadingDisplay } from './components/ReadingDisplay';
 import { calculateGridFrequencies, calculateLifePath } from './utils/numerology';
 import { generateReading } from './services/geminiService';
 import type { AppState, GridFrequencies, NumerologyReading } from './types/numerology';
 import { motion } from 'framer-motion';
+
+export default App;
 
 function App() {
   // State management
@@ -29,18 +33,37 @@ function App() {
   // Animation control
   const isFirstRender = useFirstRender();
 
+  // Swipe detection using react-haiku hook
+  useSwipeDetection({
+ onSwipeLeft: () => {
+      if (appState === 'initial') setAppState('grid_displayed');
+      else if (appState === 'grid_displayed') setAppState('reading_complete');
+      // Add logic to request reading if swiping left from grid_displayed
+      // and email is valid. For now, just change state.
+    },
+ onSwipeRight: () => {
+      if (appState === 'reading_complete') resetApp(); // Swipe right from complete resets to initial
+      else if (appState === 'grid_displayed') setAppState('initial');
+      // No swipe right from initial
+    },
+    // Optional: Prevent default touch events to avoid conflicts with scrolling if needed
+    // passive: false,
+  });
+
+  // Local storage hook for saving readings
+  const [savedReadings, setSavedReadings] = useLocalStorage('oracle-readings', []);
+
   // Validation functions
   const validateInitialForm = (): boolean => {
     if (!name.value.trim()) {
       setError('Please enter your name');
       return false;
     }
+    // Remove email validation from name field
     if (!birthdate.value) {
       setError('Please enter your birthdate');
       return false;
     }
-    setError('');
-    return true;
   };
 
   const validateEmail = (): boolean => {
@@ -93,6 +116,7 @@ function App() {
       
       const result = await generateReading(reading);
       setReadingResult(result);
+      setSavedReadings([...savedReadings, { ...reading, readingResult: result }]);
       setAppState('reading_complete');
     } catch (err) {
       setError('Error generating reading. Please try again.');
@@ -174,7 +198,9 @@ function App() {
           {/* Grid Display */}
           <Show when={appState === 'grid_displayed'}>
             <div className="space-y-10">
-              <EnhancedGridDisplay frequencies={gridFrequencies} />
+              <Spotlight highlightedCells={[gridFrequencies[3], gridFrequencies[6], gridFrequencies[9]]}>
+                <EnhancedGridDisplay frequencies={gridFrequencies} />
+              </Spotlight>
               
               <div className="text-center space-y-6">
                 <motion.div
@@ -260,5 +286,3 @@ function App() {
     </Layout>
   );
 }
-
-export default App;
